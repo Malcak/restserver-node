@@ -1,11 +1,10 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
-
-const Usuario = require('../models/usuario');
-
 //middlewares
-const { verificarToken, verificarAdminRole } = require('../middlewares/autenticacion')
+const { verificarToken, verificarAdminRole } = require('../middlewares/autenticacion');
+// Schema
+const Usuario = require('../models/usuario');
 
 const app = express();
 
@@ -77,6 +76,14 @@ app.put('/usuario/:id', [verificarToken, verificarAdminRole], function(req, res)
             return res.status(400).json({
                 ok: false,
                 err
+            });
+        }
+        if (!usuarioDB) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'Usuario no encontrado'
+                }
             });
         }
         res.json({
